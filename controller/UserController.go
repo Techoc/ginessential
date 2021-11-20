@@ -84,7 +84,7 @@ func Login(ctx *gin.Context) {
 	//判断密码是否正确
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		response.Response(ctx, http.StatusBadRequest, 400, nil, "密码错误")
+		response.Fail(ctx, nil, "密码错误")
 		return
 	}
 

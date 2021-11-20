@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/techoc/ginessential/common"
 	"github.com/techoc/ginessential/model"
+	"github.com/techoc/ginessential/response"
 	"net/http"
 	"strings"
 )
@@ -27,10 +28,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenString = tokenString[7:]
 		token, claims, err := common.ParseToken(tokenString)
 		if err != nil || !token.Valid {
-			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"code": http.StatusUnauthorized,
-				"msg":  "权限不足",
-			})
+			response.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 			//抛弃这次请求
 			ctx.Abort()
 			return
@@ -44,10 +42,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		//用户不存在
 		if user.ID == 0 {
-			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"code": http.StatusUnauthorized,
-				"msg":  "权限不足",
-			})
+			response.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 			//抛弃这次请求
 			ctx.Abort()
 			return
